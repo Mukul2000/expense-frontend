@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import './ExpenseDetail.css';
 
 export default function ExpenseDetail({ category }) {
     const [tabData, setTabData] = useState([]);
@@ -15,14 +16,15 @@ export default function ExpenseDetail({ category }) {
                 start_date: '2020-11-01',
                 end_date: '2021-12-01'
             }
-        }).then((tabs_data) => setTabData(tabs_data.data))
+        }).then((tabs_data) => {setTabData(tabs_data.data); console.log(tabs_data.data)})
             .catch(e => console.log(e));
-    });
+    }, [category]);
 
     return (
         <div>
+            {console.log(tabData)}
             {tabData.map((item,ind) => {
-                return <div key={item.created_at}> {item.name} </div>
+                return <div className='transaction' key={item.created_at}> Title: {item.name} <br/> Amount: {item.amount} <br/> Dated: {item.created_at} <br/> <br/>  </div>
             })}
         </div>
     )
