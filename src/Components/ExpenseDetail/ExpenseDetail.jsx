@@ -16,7 +16,7 @@ export default function ExpenseDetail({ category }) {
                 start_date: '2020-11-01',
                 end_date: '2021-12-01'
             }
-        }).then((tabs_data) => {setTabData(tabs_data.data); console.log(tabs_data.data)})
+        }).then((tabs_data) => setTabData(tabs_data.data))
             .catch(e => console.log(e));
     }, [category]);
 
