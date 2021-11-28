@@ -2,11 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import './LoginPage.css';
+import '../LoginPage/LoginPage.css';
 
-const LoginPage = (props) => {
+const SignupPage = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
     const [warning, setWarning] = useState("");
     const history = useNavigate();
 
@@ -15,7 +16,7 @@ const LoginPage = (props) => {
         if (user) {
             history('/dashboard');
         }
-    });
+    },[]);
 
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -28,29 +29,44 @@ const LoginPage = (props) => {
             setWarning("e-mail is invalid");
             return;
         }
+        if (password.length <= 4) {
+            setWarning("password must be atleast 5 characters");
+            return;
+        }
+        if (username.length <= 2) {
+            setWarning("username must be atleast 3 characters");
+            return;
+        }
+
         try {
-            const response = await axios.post('http://localhost:8000/api/users/login', { email: email, password: password });
-            console.log(response.data.user.token);
-            console.log(response.data);
-            localStorage.setItem('user', JSON.stringify(response.data.user))
-            history('/dashboard')
+            const response = await axios.post('http://localhost:8000/api/users/signup', {username: username, email: email, password: password });
+            alert('Account created, please login')
+            history('/login')
         }
         catch (e) {
             console.log(e);
-            setWarning("Invalid email or password");
+            setWarning("Something went wrong");
         }
     }
 
     return (
         <div className='main-wrapper'>
             <div className='details-box'>
-                Login to proceed
+                Sign Up!
                 <div className='input-field'>
                     <input
                         type='text'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder='Email'
+                    />
+                </div>
+                <div className='input-field'>
+                    <input
+                        type='text'
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder='username'
                     />
                 </div>
                 <div className='input-field'>
@@ -64,10 +80,10 @@ const LoginPage = (props) => {
                 <div className='warning'>
                     {warning}
                 </div>
-                <Button onClick={onSubmit}> Login </Button>
+                <Button onClick={onSubmit}> Sign up </Button>
             </div>
         </div>
     );
 }
 
-export default LoginPage;
+export default SignupPage;
